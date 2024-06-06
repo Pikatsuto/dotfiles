@@ -2,6 +2,8 @@
 
 <img alt="NixOS" src="assets/nixos_logo_custom_colors.svg" width="120px"/>
 
+# Move at [https://github.com/NixAchu/dotfiles](https://github.com/NixAchu/dotfiles)
+
 # ❖ Pikatsuto's Dotfiles ❖
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/Pikatsuto/dotfiles?style=for-the-badge&labelColor=1B2330&color=807EDD) ![GitHub last commit](https://img.shields.io/github/last-commit/Pikatsuto/dotfiles?style=for-the-badge&labelColor=1B2330&color=807EDD) ![GitHub repo size](https://img.shields.io/github/repo-size/Pikatsuto/dotfiles?style=for-the-badge&labelColor=1B2330&color=807EDD)
