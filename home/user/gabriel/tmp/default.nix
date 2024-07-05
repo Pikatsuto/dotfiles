@@ -1,4 +1,4 @@
-{ username, ... }:
+{ username }:
 { pkgs, ... }:
 {
 ###########
@@ -6,45 +6,84 @@
 #######################################################################
   imports = [
     ## Config ------------------------------------------------------ ##
-    ./fish
-    ./extraFiles
-    ./git
+    ./extra_files
+    ./gtk
     ./background
   
     ## Apps -------------------------------------------------------- ##
-    ./programs.nix
+    ./kitty
+    ./neofetch
+    ./btop
+    ./tmux
+    ./git
+    ./libreoffice
+    ./vencord
 
     ## System ------------------------------------------------------ ##
-    ./hyprland/keybind
-    ./hyprland/userConfig
+    ./fish
+    ./rofi
+    ./waybar
+    ./lockscreen
+    ./writable_configs
+    ./hyprland/hyprland
+    ./hyprland/hyprland_color
 
     ## Other-------------------------------------------------------- ##
+    ./programs.nix
   ];
+
 ############
 # Packages #
 #######################################################################
   home = {
+    username = "${username}";
+    homeDirectory = "/home/${username}";
+    ## ------------------------------------------------------------- ##
+    stateVersion = "24.05";
+    sessionVariables = {
+      EDITOR = "ide";
+    };
     sessionPath = [
       "/home/${username}/.local/bin/"
+      "/home/${username}/.npm-global/"
     ];
-    sessionVariables = {
-      EDITOR = pkgs.ide;
-    };
     ## ------------------------------------------------------------- ##
     packages = with pkgs; [
       ### Settings ------------------------------------------------ ###
+      brightnessctl
+      rofi-wayland
+      rofi-bluetooth
+      rofi-wpa
+      rofi-mixer
+      backup-cli
+      libnotify
+      dunst
+      btop
+      xdg-user-dirs
+      acpi
+      maim
+      xclip
+      looking-glass-client
+      font-fixer
+      (pkgs.callPackage ./hyprwal { })
+      xorg.xhost
+      global-fullscreen
 
       ### Volume -------------------------------------------------- ###
+      pavucontrol
+      rofi-pulse-select
       rofi-beats
+      easyeffects
+      pulseaudio
 
       ### Messaging ----------------------------------------------- ###
       (pkgs.unstable.vesktop) 
+      linuxKernel.packages.linux_latest_libre.v4l2loopback
 
       ### Dev ----------------------------------------------------- ###
-      btop
-      kitty
       jetbrains.phpstorm
       vscode
+      kitty
       nodejs
 
       ### Games --------------------------------------------------- ###
@@ -52,18 +91,29 @@
       citra
 
       ### Misc ---------------------------------------------------- ###
+      krita
+      neofetch
       libreoffice
       onlyoffice-bin_latest
+      gnome.file-roller
       qpdfview
+      mpc-cli
       firefox
+      vim
       viewnior
       cinnamon.nemo-with-extensions
+      rofi-hyprshot
+      rofi-power
+      wineWowPackages.waylandFull
 
       ### Utils --------------------------------------------------- ###
-      pavucontrol
-      gnome.file-roller
       galculator
+      flatpak
+      mpd
+      calc
       remmina
+      imagemagick
+      sshfs
     ];
   };
 #######################################################################

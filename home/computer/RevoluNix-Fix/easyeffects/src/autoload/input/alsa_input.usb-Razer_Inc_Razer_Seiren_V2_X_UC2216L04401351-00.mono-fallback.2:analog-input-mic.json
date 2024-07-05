@@ -1,0 +1,6 @@
+{
+    "device": "alsa_input.usb-Razer_Inc_Razer_Seiren_V2_X_UC2216L04401351-00.mono-fallback.2",
+    "device-description": "Razer Seiren V2 X Mono",
+    "device-profile": "analog-input-mic",
+    "preset-name": "Save"
+}

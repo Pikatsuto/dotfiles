@@ -31,7 +31,7 @@
     ...
   }: let
     system = "x86_64-linux";
-    hostname = "RevoluNixOS";
+    hostname = "RevoluNix";
     pkgs = nixpkgs;
     purepkgs = nixpkgs.purepkgs;
 
@@ -71,7 +71,11 @@
     applyAttrNames = builtins.mapAttrs (name: f: f name);
 
     computers = applyAttrNames {
-      "${hostname}" = self: {
+      "${hostname}-Fix" = self: {
+        hostname = "${self}";
+        modules = [];
+      };
+      "${hostname}-Lap" = self: {
         hostname = "${self}";
         modules = [
           nixos-hardware.nixosModules.asus-battery
@@ -83,7 +87,7 @@
     };
     ## ------------------------------------------------------------- ##
     defaultModules = [
-      # nixpkgs.nixosModules.virtualMachines
+      nixpkgs.nixosModules.virtualMachines
     ];
 ##########
 # Config #

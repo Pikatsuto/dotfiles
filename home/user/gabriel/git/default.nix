@@ -5,8 +5,8 @@
 #######################################################################
   programs.git = {
     enable = true;
-    # userName = "";
-    # userEmail = "";
+    userName = "Pikatsuto";
+    userEmail = "pikatsuto@gmail.com";
 
     extraConfig = {
       url.init.defaultBranch = "main";
