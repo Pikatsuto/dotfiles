@@ -61,6 +61,8 @@
               shell = pkgs.fish;
               extraGroups = [
                 "wheel"
+                "libvirtd"
+                "docker"
               ];
               initialPassword = "admin";
             };
