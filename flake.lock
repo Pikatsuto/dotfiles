@@ -70,6 +70,7 @@
       },
       "original": {
         "owner": "RevoluNix",
+        "ref": "testing",
         "repo": "revolunixpkgs",
         "type": "github"
       }
