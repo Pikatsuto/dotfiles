@@ -39,6 +39,22 @@
 
   services.xserver.videoDrivers = [ "amdgpu" ];
 
+  networking = {
+    interfaces = {
+      enp8s0.useDHCP = false;
+      br0 = {
+        useDHCP = false;
+        ipv4.addresses = [{
+          address = "192.168.1.39";
+          prefixLength = 24;
+        }];
+      };
+    };
+    defaultGateway = "192.168.1.1";
+    nameservers = ["1.1.1.1" "1.0.0.1"];
+    bridges.br0.interfaces = [ "enp8s0" ];
+};
+
   virtualisation.virtualMachines = {
     enable = true;
     username = users.primaryUser;
