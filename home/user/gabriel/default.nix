@@ -39,6 +39,11 @@
 
       ### Messaging ----------------------------------------------- ###
       (pkgs.unstable.vesktop) 
+      (pkgs.unstable.discord.override {
+        withOpenASAR = true;
+        withVencord = true;
+      })
+      xwaylandvideobridge
 
       ### Dev ----------------------------------------------------- ###
       btop
@@ -46,6 +51,7 @@
       jetbrains.phpstorm
       vscode
       nodejs
+      (pkgs.unstable.termius)
 
       ### Games --------------------------------------------------- ###
       prismlauncher
