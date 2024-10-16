@@ -10,37 +10,39 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
+  boot.supportedFilesystems = [ "ntfs" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/ffafe140-c729-4f4e-8f44-479a2d2e4541";
-      fsType = "ext4";
+    { device = "/dev/disk/by-uuid/945d5909-76c3-46a8-af61-faddafb7f315";
+      fsType = "btrfs";
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-uuid/d08ffb70-6970-44e2-92cf-f2fe5590a619";
+      fsType = "btrfs";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/b74157e5-0433-4d23-9594-0e7925cc364e";
-      fsType = "ext4";
-    };
-
-  fileSystems."/var" =
-    { device = "/dev/disk/by-uuid/3c541bbd-569e-40ed-84bd-fe3313a80e3c";
-      fsType = "ext4";
+    { device = "/dev/disk/by-uuid/7721cab1-806a-497b-b573-4f3c0dcb79c9";
+      fsType = "btrfs";
     };
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/12CE-A600";
+    { device = "/dev/disk/by-uuid/C4BE-713E";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/20a0e2c5-50a5-4790-bec3-845b2c761ffe";
-      fsType = "ext4";
+  fileSystems."/home/gabriel/VM/DISK" =
+    { device = "/dev/disk/by-uuid/0F05EDBE49F0A952";
+      fsType = "ntfs-3g";
+      options = [ "rw" "uid=1000" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/80e75434-0203-4c0f-8a17-e2f7472e79b8"; }
+    [ { device = "/dev/disk/by-uuid/e81b7380-f2f9-47f1-9166-6997e9228540"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -48,7 +50,6 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp0s20f0u1u1c2.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
