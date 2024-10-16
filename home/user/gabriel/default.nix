@@ -36,6 +36,7 @@
 
       ### Volume -------------------------------------------------- ###
       rofi-beats
+      pwvucontrol
 
       ### Messaging ----------------------------------------------- ###
       (pkgs.unstable.vesktop) 
@@ -49,6 +50,7 @@
       btop
       kitty
       jetbrains.phpstorm
+      jetbrains-toolbox
       vscode
       nodejs
       (pkgs.unstable.termius)
@@ -66,7 +68,6 @@
       cinnamon.nemo-with-extensions
 
       ### Utils --------------------------------------------------- ###
-      pavucontrol
       gnome.file-roller
       galculator
       remmina
