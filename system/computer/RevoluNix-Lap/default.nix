@@ -1,68 +1,72 @@
 { users, ... }:
 { config, pkgs, lib, ... }:
 {
-  boot.loader.grub.useOSProber = true;
-  boot.loader.grub.extraEntries = ''
-    menuentry "Windows 11" --class windows --class os {
-      # Insert modules needed in order to access the iso-file
-      # choose the right module for the partition-table-scheme the image lies on
-      insmod part_gpt
-
-      # choose the right module for the filesystem the image lies on
-      insmod ntfs
-      insmod fat
-      insmod ext2
-
-      # Insert module needed in order to find partition
-      insmod search_fs_uuid
-
-
-      # Set UUID of partition with the iso-image
-      # and let grub2 find the partition
-      # (save it's identifier to the variable $root)
-      set uuid="3c541bbd-569e-40ed-84bd-fe3313a80e3c"
-      search --no-floppy --set=root --fs-uuid $uuid
-
-      # Mount the iso image by addressing it with (partition)/path
-      set img=/lib/libvirt/images/win11.img
-      loopback loop ($root)$img
-      set uuid="5849-0317"
-      search --no-floppy --set=root --fs-uuid $uuid
-
-
-      # boot (chain-load) the windows11-image using the bootmgfw.efi file located
-      # on the Win11 .img
-      # chainloader (loop,gpt1)/EFI/Microsoft/Boot/bootmgfw.efi
-      linux16 /wimboot
-      initrd16 \
-        newc:bootmgr:/bootmgr \
-        newc:bcd:/Boot/BCD \
-        newc:boot.sdi:/boot.sdi \
-        newc:boot.wim:/sources/boot.wim
-    }
-
-    menuentry "Boot Windows from VHD on LVM" {
-      insmod lvm
-      insmod part_gpt
-
-      set uuid="ffafe140-c729-4f4e-8f44-479a2d2e4541"
-      search --no-floppy --fs-uuid --set=root $uuid
-
-      linux /nix/store/r4mrzns6615l18nfyfqmvbx0cmfzs4s2-linux-6.10.9/bzImage root=$root quiet
-      initrd /nix/store/npy9p8z4pi9kxbbcpwyzmb459jb4zcx7-initrd-linux-6.10.9
-      linux /boot/SCRIPT/boot_windows_from_vhd.sh
-
-      echo "Démarre le chargeur de démarrage Windows (bootmgr) depuis la partition de démarrage monté"
-      chainloader /mnt/EFI/Microsoft/Boot/bootmgfw.efi
-    }
-
-    menuentry "supergrub2" {
-      set uuid="12CE-A600"
-      search --no-floppy --fs-uuid --set=root $uuid
-      chainloader /EFI/NixOS-boot-efi/supergrub2-classic-2.06s4-x86_64_efi-STANDALONE.EFI
-    }
-  '';
-       # ntldr (winloop,1)/bootmgr
+  # boot.loader.grub.useOSProber = true;
+  # boot.loader.grub.extraEntries = ''
+  #   menuentry "Windows 11" --class windows --class os {
+  #     # Insert modules needed in order to access the iso-file
+  #     # choose the right module for the partition-table-scheme the image lies on
+  #     insmod part_gpt
+  #
+  #     # choose the right module for the filesystem the image lies on
+  #     insmod ntfs
+  #     insmod fat
+  #     insmod ext2
+  #
+  #     # Insert module needed in order to find partition
+  #     insmod search_fs_uuid
+  #
+  #
+  #     # Set UUID of partition with the iso-image
+  #     # and let grub2 find the partition
+  #     # (save it's identifier to the variable $root)
+  #     set uuid="3c541bbd-569e-40ed-84bd-fe3313a80e3c"
+  #     search --no-floppy --set=root --fs-uuid $uuid
+  #
+  #     # Mount the iso image by addressing it with (partition)/path
+  #     set img=/lib/libvirt/images/win11.img
+  #     loopback loop ($root)$img
+  #     set uuid="5849-0317"
+  #     search --no-floppy --set=root --fs-uuid $uuid
+  #
+  #
+  #     # boot (chain-load) the windows11-image using the bootmgfw.efi file located
+  #     # on the Win11 .img
+  #     # chainloader (loop,gpt1)/EFI/Microsoft/Boot/bootmgfw.efi
+  #     linux16 /wimboot
+  #     initrd16 \
+  #       newc:bootmgr:/bootmgr \
+  #       newc:bcd:/Boot/BCD \
+  #       newc:boot.sdi:/boot.sdi \
+  #       newc:boot.wim:/sources/boot.wim
+  #   }
+  #
+  #   menuentry "Boot Windows from VHD" {
+  #     insmod part_gpt
+  #     insmod ntfs
+  #     insmod vhd
+  #
+  #     set uuid="0F05EDBE49F0A952"
+  #     search --no-floppy --fs-uuid --set=root $uuid
+  #
+  #     # chainloader /mnt/EFI/Microsoft/Boot/bootmgfw.efi
+  #     #
+  #     # set root=(hd0,gpt3)
+  #     vhd /win11.vhd
+  #
+  #     uuid="6A43-705A"
+  #     search --no-floppy --fs-uuid --set=root $uuid
+  #     chainloader
+  #
+  #   }
+  #
+  #   menuentry "supergrub2" {
+  #     set uuid="12CE-A600"
+  #     search --no-floppy --fs-uuid --set=root $uuid
+  #     chainloader /EFI/NixOS-boot-efi/supergrub2-classic-2.06s4-x86_64_efi-STANDALONE.EFI
+  #   }
+  # '';
+  #      # ntldr (winloop,1)/bootmgr
 
   networking.extraHosts = ''
     10.193.48.101 worktogether.dev
@@ -132,7 +136,7 @@
         hardware = {
           disk = {
             size = 512;
-            path = "/var/lib/libvirt/images";
+            path = "/home/gabriel/VM/DISK";
           };
         };
       }
