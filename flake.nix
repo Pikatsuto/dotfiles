@@ -125,6 +125,7 @@
           home-manager.nixosModules.home-manager {home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
+            backupFileExtension = "backup18";
             users = (users.configs.home hostname);
           };}
         ];
