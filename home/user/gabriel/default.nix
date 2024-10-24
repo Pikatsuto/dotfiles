@@ -40,11 +40,6 @@
 
       ### Messaging ----------------------------------------------- ###
       (pkgs.unstable.vesktop) 
-      (pkgs.unstable.discord.override {
-        withOpenASAR = true;
-        withVencord = true;
-      })
-      xwaylandvideobridge
 
       ### Dev ----------------------------------------------------- ###
       btop
