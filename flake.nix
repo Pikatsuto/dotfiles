@@ -42,6 +42,10 @@
       allUsers = [
         primaryUser
       ];
+      descriptions = {
+        "${primaryUser}" = "Gabriel Guillou";
+      };
+
 
       configs = {
         home = hostname: builtins.listToAttrs
@@ -59,6 +63,7 @@
           (nixpkgs.lib.forEach allUsers (username: {
             name = username;
             value = {
+              description = descriptions."${username}";
               isNormalUser = true;
               shell = pkgs.fish;
               extraGroups = [

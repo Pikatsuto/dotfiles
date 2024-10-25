@@ -59,6 +59,7 @@
       onlyoffice-bin_latest
       qpdfview
       firefox
+      chromium
       viewnior
       cinnamon.nemo-with-extensions
 
