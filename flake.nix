@@ -22,6 +22,7 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.1";
   };
 #############
 # Variables #
@@ -30,6 +31,7 @@
     nixos-hardware,
     nixpkgs,
     home-manager,
+    lanzaboote,
     ...
   }: let
     system = "x86_64-linux";
@@ -42,10 +44,6 @@
       allUsers = [
         primaryUser
       ];
-      descriptions = {
-        "${primaryUser}" = "Gabriel Guillou";
-      };
-
 
       configs = {
         home = hostname: builtins.listToAttrs
@@ -63,7 +61,6 @@
           (nixpkgs.lib.forEach allUsers (username: {
             name = username;
             value = {
-              description = descriptions."${username}";
               isNormalUser = true;
               shell = pkgs.fish;
               extraGroups = [
@@ -93,10 +90,17 @@
           nixos-hardware.nixosModules.common-pc-ssd
         ];
       };
+      "${hostname}-Fra" = self: {
+        hostname = "${self}";
+        modules = [
+          nixos-hardware.nixosModules.framework-16-7040-amd
+        ];
+      };
     };
     ## ------------------------------------------------------------- ##
     defaultModules = [
       nixpkgs.nixosModules.virtualMachines
+      lanzaboote.nixosModules.lanzaboote
     ];
 ##########
 # Config #
