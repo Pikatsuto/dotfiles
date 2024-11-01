@@ -22,7 +22,6 @@
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.1";
   };
 #############
 # Variables #
@@ -31,7 +30,6 @@
     nixos-hardware,
     nixpkgs,
     home-manager,
-    lanzaboote,
     ...
   }: let
     system = "x86_64-linux";
@@ -100,7 +98,6 @@
     ## ------------------------------------------------------------- ##
     defaultModules = [
       nixpkgs.nixosModules.virtualMachines
-      lanzaboote.nixosModules.lanzaboote
     ];
 ##########
 # Config #

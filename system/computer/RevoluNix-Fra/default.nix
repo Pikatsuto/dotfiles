@@ -13,12 +13,12 @@
     ];
     supportedFilesystems = [ "ntfs" ];
 
-    loader.systemd-boot.enable = lib.mkForce false;
-    loader.grub.enable = lib.mkForce false;
-    lanzaboote = {
-      enable = true;
-      pkiBundle = "/etc/secureboot";
-    };
+    # loader.systemd-boot.enable = lib.mkForce false;
+    # loader.grub.enable = lib.mkForce false;
+    # lanzaboote = {
+    #   enable = true;
+    #   pkiBundle = "/etc/secureboot";
+    # };
     plymouth.enable = true;
   };
 
@@ -103,7 +103,6 @@
      ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0014", ATTR{power/wakeup}="disabled", ATTR{driver/1-1.1.1.4/power/wakeup}="disabled"
   '';
 
-
   environment.systemPackages = with pkgs; [
     # Thunderbolt
     thunderbolt
@@ -140,11 +139,62 @@
 
     machines = [
       {
+        lookingGlass = true;
         hardware = {
-          disk = {
-            size = 512;
-            path = "/home/gabriel/VM/DISK";
-          };
+          cores = 4;
+          memory = 16;
+          disk.enable = false;
+        };
+        passthrough = {
+          enable = true;
+          pcies = [
+            {
+              lines = {
+                bus = "03";
+                slot = "00";
+                functions = [
+                  {
+                    function = "0";
+                    vendor = "1002:7480";
+                    drivers = [
+                      "amdgpu"
+                      "radeon"
+                    ];
+                    blacklist = {
+                      vfioPriority = true;
+                    };
+                  }
+                  {
+                    function = "1";
+                    vendor = "1002:ab30";
+                    drivers = [
+                      "snd_intel_hda"
+                    ];
+                    blacklist = {
+                      vfioPriority = true;
+                    };
+                  }
+                ];
+              };
+            }
+            {
+              disk = true;
+              lines = {
+                vmBus = "0a";
+                bus = "04";
+                slot = "00";
+                functions = [
+                  {
+                    function = "0";
+                    vendor = "15b7:5042";
+                    blacklist = {
+                      vfioPriority = true;
+                    };
+                  }
+                ];
+              };
+            }
+          ];
         };
       }
     ];
