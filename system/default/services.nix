@@ -7,6 +7,7 @@
   services = {
     displayManager = {
       sddm = {
+        theme = "chili";
         autoNumlock = true;
         autoLogin.relogin = true;
       };
