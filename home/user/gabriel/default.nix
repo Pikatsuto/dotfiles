@@ -33,7 +33,6 @@
     ## ------------------------------------------------------------- ##
     packages = with pkgs; [
       ### Settings ------------------------------------------------ ###
-      numlockw
       xwaylandvideobridge
 
       ### Volume -------------------------------------------------- ###
@@ -46,11 +45,7 @@
       ### Dev ----------------------------------------------------- ###
       btop
       kitty
-      jetbrains.phpstorm
-      jetbrains-toolbox
       vscode
-      nodejs
-      (pkgs.unstable.termius)
 
       ### Games --------------------------------------------------- ###
       prismlauncher
@@ -61,7 +56,6 @@
       onlyoffice-bin_latest
       qpdfview
       firefox
-      chromium
       viewnior
       cinnamon.nemo-with-extensions
 
@@ -69,6 +63,7 @@
       gnome.file-roller
       galculator
       remmina
+      nextcloud-client
     ];
   };
 #######################################################################
