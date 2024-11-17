@@ -2,7 +2,7 @@
 { config, pkgs, lib, ... }:
 {
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = [
       "net.ifnames=0"
       "amd_iommu=on"
@@ -139,9 +139,9 @@
 
     machines = [
       {
-        lookingGlass = true;
+        lookingGlass = false;
         hardware = {
-          cores = 4;
+          cores = 5;
           memory = 16;
           disk.enable = false;
         };
@@ -154,6 +154,20 @@
                 slot = "00";
                 functions = [
                   {
+                    fix.rebar = {
+                      enable = true;
+                      resources = [
+                        {
+                          resource = 0;
+                          resize = 13;
+                        }
+                        {
+                          resource = 2;
+                          resize = 3;
+                        }
+                      ];
+                    };
+
                     function = "0";
                     vendor = "1002:7480";
                     drivers = [
@@ -187,9 +201,6 @@
                   {
                     function = "0";
                     vendor = "15b7:5042";
-                    blacklist = {
-                      vfioPriority = true;
-                    };
                   }
                 ];
               };
