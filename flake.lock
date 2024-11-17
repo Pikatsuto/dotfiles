@@ -82,11 +82,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1730016908,
-        "narHash": "sha256-bFCxJco7d8IgmjfNExNz9knP8wvwbXU4s/d53KOK6U0=",
+        "lastModified": 1731604581,
+        "narHash": "sha256-Qq2YZZaDTB3FZLWU/Hgh1uuWlUBl3cMLGB99bm7rFUM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "e83414058edd339148dc142a8437edb9450574c8",
+        "rev": "1d0862ee2d7c6f6cd720d6f32213fa425004be10",
         "type": "github"
       },
       "original": {
@@ -96,11 +96,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1730368399,
-        "narHash": "sha256-F8vJtG389i9fp3k2/UDYHMed3PLCJYfxCqwiVP7b9ig=",
+        "lastModified": 1731797098,
+        "narHash": "sha256-UhWmEZhwJZmVZ1jfHZFzCg+ZLO9Tb/v3Y6LC0UNyeTo=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "da14839ac5f38ee6adbdb4e6db09b5eef6d6ccdc",
+        "rev": "672ac2ac86f7dff2f6f3406405bddecf960e0db6",
         "type": "github"
       },
       "original": {
@@ -119,11 +119,11 @@
         "virtual-machines": "virtual-machines"
       },
       "locked": {
-        "lastModified": 1730411791,
-        "narHash": "sha256-rhnrn9IXapFT3EzMju8B8yT8akOmnFWat7c4HRu6KhI=",
+        "lastModified": 1731875037,
+        "narHash": "sha256-sSZsKazU25msiJpp810rDh8FxMOsBW94Ahux2R2vVk4=",
         "owner": "RevoluNix",
         "repo": "revolunixpkgs",
-        "rev": "6069af3725e24e34277284fc03300c9423a95267",
+        "rev": "1b809f8b720a76bf1c9d02435bc7a2da4d5661ef",
         "type": "github"
       },
       "original": {
@@ -165,11 +165,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1730137625,
-        "narHash": "sha256-9z8oOgFZiaguj+bbi3k4QhAD6JabWrnv7fscC/mt0KE=",
+        "lastModified": 1731797254,
+        "narHash": "sha256-df3dJApLPhd11AlueuoN0Q4fHo/hagP75LlM5K1sz9g=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "64b80bfb316b57cdb8919a9110ef63393d74382a",
+        "rev": "e8c38b73aeb218e27163376a2d617e61a2ad9b59",
         "type": "github"
       },
       "original": {
@@ -197,11 +197,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1730200266,
-        "narHash": "sha256-l253w0XMT8nWHGXuXqyiIC/bMvh1VRszGXgdpQlfhvU=",
+        "lastModified": 1731139594,
+        "narHash": "sha256-IigrKK3vYRpUu+HEjPL/phrfh7Ox881er1UEsZvw9Q4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "807e9154dcb16384b1b765ebe9cd2bba2ac287fd",
+        "rev": "76612b17c0ce71689921ca12d9ffdc9c23ce40b2",
         "type": "github"
       },
       "original": {
@@ -242,11 +242,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729954535,
-        "narHash": "sha256-A5gnD3AcOnPHmMWICWLI26A3BQn7ufNDz0dckmfdYbo=",
+        "lastModified": 1731718063,
+        "narHash": "sha256-DCXZmX1QdnbJ8992bX1QK8Y3kxKhaUB7PxDAApbyvto=",
         "owner": "RevoluNix",
         "repo": "module-system",
-        "rev": "ffb6f58ddd3c330de2935c882f4510c09fa8a1d3",
+        "rev": "ecbfd80f3785375327f47973ed3694b0c0344bd0",
         "type": "github"
       },
       "original": {
@@ -280,11 +280,11 @@
     },
     "unstable": {
       "locked": {
-        "lastModified": 1730200266,
-        "narHash": "sha256-l253w0XMT8nWHGXuXqyiIC/bMvh1VRszGXgdpQlfhvU=",
+        "lastModified": 1731676054,
+        "narHash": "sha256-OZiZ3m8SCMfh3B6bfGC/Bm4x3qc1m2SVEAlkV6iY7Yg=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "807e9154dcb16384b1b765ebe9cd2bba2ac287fd",
+        "rev": "5e4fbfb6b3de1aa2872b76d49fafc942626e2add",
         "type": "github"
       },
       "original": {
@@ -320,11 +320,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1730411768,
-        "narHash": "sha256-QtADlKPt5WgkNHAht1+PSbouM5DTXVT4MmVre3QJI7Y=",
+        "lastModified": 1730507789,
+        "narHash": "sha256-9cRRInUlV2K7uWvm6Z3llTNaXdDoIKln24AGIXGeMvQ=",
         "owner": "RevoluNix",
         "repo": "module-virtual-machines",
-        "rev": "219e398f28564a179be72cbb19b6645c3bb2b22c",
+        "rev": "5c70f24222089ab45151a93afe7c5bb135b2d695",
         "type": "github"
       },
       "original": {
