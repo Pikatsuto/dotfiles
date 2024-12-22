@@ -27,25 +27,45 @@
     sessionPath = [
       "/home/${username}/.local/bin/"
     ];
+    ## ------------------------------------------------------------- ##
     sessionVariables = {
       EDITOR = pkgs.ide;
     };
     ## ------------------------------------------------------------- ##
     packages = with pkgs; [
       ### Settings ------------------------------------------------ ###
-      xwaylandvideobridge
 
       ### Volume -------------------------------------------------- ###
       rofi-beats
       pwvucontrol
 
       ### Messaging ----------------------------------------------- ###
-      (pkgs.vesktop)
+      vesktop
+      # (discord.override {
+      #   withOpenASAR = true;
+      #   withVencord = true;
+      # })
+      # xwaylandvideobridge
 
       ### Dev ----------------------------------------------------- ###
       btop
       kitty
       vscode
+      drawio
+      (writeShellApplication {
+        name = "mssql-docker";
+        runtimeInputs = [ docker ];
+        text = ''
+          cd ~/SYNC/Docker_Compose/MSSQL
+
+          [ -z "$*" ] && \
+            echo "mssql-docker start|stop" && exit 1
+          [ "$*" == start ] && \
+            docker compose up -d
+          [ "$*" == stop ] && \
+            docker compose stop
+        '';
+      })
 
       ### Games --------------------------------------------------- ###
       prismlauncher
@@ -57,12 +77,17 @@
       qpdfview
       firefox
       viewnior
-      cinnamon.nemo-with-extensions
+      nemo-with-extensions
+      bitwarden-desktop
+      pinta
+      flowblade
+      vlc
 
       ### Utils --------------------------------------------------- ###
-      gnome.file-roller
+      file-roller
       galculator
-      remmina
+      # remmina
+      gparted
       nextcloud-client
     ];
   };
