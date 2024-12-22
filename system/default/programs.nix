@@ -4,14 +4,21 @@
 # Settings #
 #######################################################################
   programs.fish.enable = true;
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    gamescopeSession.enable = true;
+  };
 ###########
 # Package #
 #######################################################################
   environment = {
     shells = with pkgs; [ fish ];
     variables.EDITOR = pkgs.ide;
-    unixODBCDrivers = with pkgs; [
-    ];
+    # unixODBCDrivers = with pkgs; [
+    # ];
     systemPackages = with pkgs; [
       ### Utils --------------------------------------------------- ###
       fish
@@ -21,7 +28,8 @@
       ### System -------------------------------------------------- ###
       nix-direnv
       multipath-tools
-      sddm-chili-theme
+      sddm-sugar-dark
+      libsForQt5.qt5.qtgraphicaleffects
 
       ### Dev ----------------------------------------------------- ###
       android-tools
