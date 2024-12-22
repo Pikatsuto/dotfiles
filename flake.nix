@@ -8,11 +8,9 @@
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://cache.saumon.network/proxmox-nixos"
-      "https://hyprland.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "proxmox-nixos:nveXDuVVhFDRFx8Dn19f1WDEaNRJjPrF2CPD2D+m1ys="
     ];
   };
@@ -21,7 +19,7 @@
     nixpkgs.url = "github:RevoluNix/revolunixpkgs/testing";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -36,8 +34,25 @@
   }: let
     system = "x86_64-linux";
     hostname = "RevoluNix";
-    pkgs = nixpkgs.proxmoxPkgs;
+    pkgs = nixpkgs;
     purepkgs = nixpkgs.purepkgs;
+
+    usersInfo = rec {
+      primaryUser = {
+        isNormalUser = true;
+        name = "gabriel";
+        shell = pkgs.fish;
+        extraGroups = [
+          "wheel"
+          "libvirtd"
+          "docker"
+        ];
+        initialPassword = "admin";
+      };
+      allUsers = [
+        primaryUser
+      ];
+    };
 
     users = rec {
       primaryUser = "gabriel";
