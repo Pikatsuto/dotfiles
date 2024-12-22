@@ -3,15 +3,13 @@
 {
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
-    kernelParams = [
-      "net.ifnames=0"
-      "amd_iommu=on"
-      "radeon.si_support=0"
-      "amdgpu.si_support=1"
-      "video=eDP-2:2560x1600@165"
-      "mem_sleep_default=deep"
-    ];
-    supportedFilesystems = [ "ntfs" ];
+    # kernelParams = [
+    #   "net.ifnames=0"
+    #   "amd_iommu=on"
+    #   "video=eDP-2:2560x1600@165"
+    #   "mem_sleep_default=deep"
+    # ];
+    # supportedFilesystems = [ "ntfs" ];
 
     # loader.systemd-boot.enable = lib.mkForce false;
     # loader.grub.enable = lib.mkForce false;
@@ -22,41 +20,36 @@
     plymouth.enable = true;
   };
 
-  systemd.tmpfiles.rules = 
-  let
-    rocmEnv = pkgs.symlinkJoin {
-      name = "rocm-combined";
-      paths = with pkgs.rocmPackages; [
-        rocblas
-        hipblas
-        clr
-      ];
-    };
-  in [
-    "L+    /opt/rocm   -    -    -     -    ${rocmEnv}"
-  ];
+  environment.variables = { ROC_ENABLE_PRE_VEGA = "1"; };
 
-  hardware.opengl = {
+  hardware.graphics = {
 	  enable = true;
+	  enable32Bit = true;
     extraPackages = with pkgs; [
       rocmPackages.clr.icd
       amdvlk
+      vaapiVdpau # not sure if this is needed
+      libvdpau-va-gl # also not sure if this is needed
+      mesa.opencl
     ];
     extraPackages32 = with pkgs; [
       driversi686Linux.amdvlk
     ];
-    driSupport = true;
-    driSupport32Bit = true;
   };
+
+  
+  systemd.tmpfiles.rules = [
+    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages_5.clr}"
+  ];
 
   systemd.packages = with pkgs; [ lact ];
   systemd.services.lactd.wantedBy = ["multi-user.target"];
 
   services.xserver.videoDrivers = [ "amdgpu" ];
+  boot.initrd.kernelModules = [ "amdgpu" ];
 
-  
   services = {
-    blueman.enable = true;
+    # blueman.enable = true;
     upower.enable = true;
     fprintd.enable = true;
     power-profiles-daemon.enable = false;
@@ -78,30 +71,30 @@
     hybrid-sleep.enable = lib.mkForce true;
   };
 
-  environment.etc = {
-    "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
-      bluez_monitor.properties = {
-        ["bluez5.enable-sbc-xq"] = true,
-        ["bluez5.enable-msbc"] = true,
-        ["bluez5.enable-hw-volume"] = true,
-        ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
-      }
-    '';
-  };
-
-  environment.etc = {
-    "libinput/local-overrides.quirks".text = ''
-      [Keyboard]
-      MatchUdevType=keyboard
-      MatchName=Framework Laptop 16 Keyboard Module - ANSI Keyboard
-      AttrKeyboardIntegration=internal
-    '';
-  };
-
-  services.udev.extraRules = ''
-     ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0012", ATTR{power/wakeup}="disabled", ATTR{driver/1-1.1.1.4/power/wakeup}="disabled"
-     ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0014", ATTR{power/wakeup}="disabled", ATTR{driver/1-1.1.1.4/power/wakeup}="disabled"
-  '';
+  # environment.etc = {
+  #   "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+  #     bluez_monitor.properties = {
+  #       ["bluez5.enable-sbc-xq"] = true,
+  #       ["bluez5.enable-msbc"] = true,
+  #       ["bluez5.enable-hw-volume"] = true,
+  #       ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+  #     }
+  #   '';
+  # };
+  #
+  # environment.etc = {
+  #   "libinput/local-overrides.quirks".text = ''
+  #     [Keyboard]
+  #     MatchUdevType=keyboard
+  #     MatchName=Framework Laptop 16 Keyboard Module - ANSI Keyboard
+  #     AttrKeyboardIntegration=internal
+  #   '';
+  # };
+  #
+  # services.udev.extraRules = ''
+  #    ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0012", ATTR{power/wakeup}="disabled", ATTR{driver/1-1.1.1.4/power/wakeup}="disabled"
+  #    ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0014", ATTR{power/wakeup}="disabled", ATTR{driver/1-1.1.1.4/power/wakeup}="disabled"
+  # '';
 
   environment.systemPackages = with pkgs; [
     # Thunderbolt
@@ -119,18 +112,23 @@
 
     lact
     sbctl
+    clinfo
 
   ];
 
   # ------------------------------------------------------------------ #
-  hardware.sane.enable = true;
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.package = if (lib.versionOlder pkgs.bluez.version "5.76") then pkgs.unstable.bluez else pkgs.bluez;
-  hardware.keyboard.qmk.enable = true;
+  # hardware.sane.enable = true;
+  # hardware.bluetooth.enable = true;
+  # hardware.bluetooth.package = if (lib.versionOlder pkgs.bluez.version "5.76") then pkgs.unstable.bluez else pkgs.bluez;
+  # hardware.keyboard.qmk.enable = true;
 
-  environment.variables = {
-    NIXOS_OZONE_WL = "y";
-  };
+  # environment.variables = {
+  #   NIXPKGS_ALLOW_INSECURE = "y";
+  # };
+
+  # services.ollama.enable = true;
+
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
 
   virtualisation.virtualMachines = {
     enable = true;

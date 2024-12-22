@@ -8,41 +8,52 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "uas" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "uas" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.supportedFilesystems = [ "ntfs" ];
+  environment.systemPackages = [ pkgs.cifs-utils ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/cdcfac99-2cb7-4a7e-adea-b6988fd319f8";
-      fsType = "ext4";
+    { device = "/dev/disk/by-uuid/57bae7e1-8ab3-4646-8c15-93e0d647d750";
+      fsType = "btrfs";
+    };
+
+  fileSystems."/var" =
+    { device = "/dev/disk/by-uuid/9ef76f38-bc32-46b6-a1cc-21a2db6c3403";
+      fsType = "btrfs";
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-uuid/20cd13e3-02a0-467a-b564-ece5f0e3090f";
+      fsType = "btrfs";
     };
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/4CAC-BFE5";
+    { device = "/dev/disk/by-uuid/FD62-E2E0";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/var" =
-    { device = "/dev/disk/by-uuid/a75cb4d5-65fd-46d5-badd-8ee02cf89ed7";
-      fsType = "ext4";
-    };
-
   fileSystems."/home/gabriel" =
-    { device = "/dev/disk/by-uuid/2D02510A069478E8";
+    { device = "/dev/disk/by-uuid/01DB3E649C7B2750";
       fsType = "ntfs-3g";
       options = [ "rw" "uid=1000" "gid=100" "umask=077" ];
     };
 
-  fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/ad7a1fae-d00e-43b5-bc80-82e60a61ced6";
-      fsType = "ext4";
-    };
+  fileSystems."/mnt/Video" = {
+    device = "//192.168.1.61/Big/Video";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,rw,uid=1000,gid=100";
+
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
+  };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/55bc475c-495a-4907-94e3-b9beb75370ff"; }
+    [ { device = "/dev/disk/by-uuid/02d7ac39-d72d-4fff-98fa-2070a7664515"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -50,7 +61,7 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp199s0f3u1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.eth0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp5s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
