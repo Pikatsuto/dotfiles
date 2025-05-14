@@ -1,57 +1,55 @@
 #!/usr/bin/env sh
 
-remove_old() {
-  cpwrconf &
+restart_waybar() {
+  pkill -f waybar
+  waybar
+}
+
+restart_hyprpaper() {
+  hyprpaper 2> /dev/null
+  hyprctl hyprpaper reload ",~/.config/background-noblur.png"
 }
 
 get_walpaper() {
   BACKGROUNDS=$(ls ~/.config/background/ | cut -d ' ' -f 1)
-  NUMBERS_OF_BACKGROUNDS=0;
+  NUMBERS_OF_BACKGROUNDS=0
 
   for j in ${BACKGROUNDS}; do
-    ((NUMBERS_OF_BACKGROUNDS++));
-  done;
+    ((NUMBERS_OF_BACKGROUNDS++))
+  done
 
   WALPAPER=$(
     echo ${BACKGROUNDS} | cut -d ' ' -f $((1 + RANDOM % NUMBERS_OF_BACKGROUNDS))
   )
 }
 
-make_blur() {
-  ln -s ~/.config/background/${WALPAPER} ~/.config/background-noblur.png &
-
+blur_walpaper() {
   convert \
     ~/.config/background/${WALPAPER} \
     -filter Gaussian -blur 0x32 \
     ~/.config/background.png &
 }
 
+copy_walpaper() {
+  ln -s ~/.config/background/${WALPAPER} ~/.config/background-noblur.png &
+  restart_hyprpaper &
+}
+
 update_wal() {
   wpg -a ~/.config/background/${WALPAPER}
   wpg -A ${WALPAPER}
   wpg -s ${WALPAPER}
-}
 
-restart_all() {
-  pkill -f swaybg &
-  pkill -f waybar &
-
-  wait
-
-  swaybg -m fill -i ~/.config/background/${WALPAPER} &
+  restart_waybar &
   hyprctl reload &
-  waybar &
 }
 
 main() {
-  remove_old
+  cpwrconf
   get_walpaper
-  update_wal
-
-  wait
-
-  restart_all
-  make_blur &
+  blur_walpaper &
+  update_wal &
+  copy_walpaper &
 }
 
 main > /dev/null 2>&1

@@ -4,7 +4,7 @@
   makeWrapper,
   wpgtk,
   python311,
-  swaybg,
+  hyprpaper,
   waybar,
 }:
 ############
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [
         wpgtk
         python311
-        swaybg
         waybar
+        hyprpaper
       ]}
   '';
   # ----------------------------------------------------------------- #

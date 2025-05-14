@@ -47,13 +47,20 @@
   systemd = {
     services.wpa_supplicant = lib.mkForce {
       enable = true;
-      after = [ "network.target" ];
-      wantedBy = [ "graphical.target" ];
-      serviceConfig.ExecStart = let
-        bin = "${pkgs.wpa_supplicant}/bin/wpa_supplicant";
-        args = "-u -Dnl80211,wext -i wlan0";
-        config = "-c /etc/wpa_supplicant/wpa_supplicant.conf";
-      in "${bin} ${args} ${config}";
+      description = "WPA supplicant";
+      before = [ "network.target" ];
+      wants = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        type = "dbus";
+        alias = "dbus-fi.epitest.hostap.WPASupplicant.service";
+        busName = "fi.epitest.hostap.WPASupplicant";
+        ExecStart = let
+          bin = "${pkgs.wpa_supplicant}/bin/wpa_supplicant";
+          args = "-u -Dnl80211,wext -i wlan0";
+          config = "-c /etc/wpa_supplicant/wpa_supplicant.conf";
+        in "${bin} ${args} ${config}";
+      };
     };
     targets = {
       sleep.enable = false;

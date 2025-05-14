@@ -6,5 +6,6 @@
     ./hyprland
     ./hyprlock
     ./electron
+    ./hyprpaper
   ];
 }
