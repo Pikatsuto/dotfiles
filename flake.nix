@@ -7,21 +7,25 @@
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
-      "https://cache.saumon.network/proxmox-nixos"
+      "https://cache.flox.dev"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "proxmox-nixos:nveXDuVVhFDRFx8Dn19f1WDEaNRJjPrF2CPD2D+m1ys="
+      "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
     ];
   };
   # ----------------------------------------------------------------- #
   inputs = {
-    nixpkgs.url = "github:RevoluNix/revolunixpkgs/testing";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flox.url = "github:flox/flox/v1.3.17";
+    nix-snapd.url = "github:nix-community/nix-snapd";
+    nix-snapd.inputs.nixpkgs.follows = "nixpkgs";
   };
 #############
 # Variables #
@@ -30,12 +34,22 @@
     nixos-hardware,
     nixpkgs,
     home-manager,
+    unstable,
+    flox,
+    nix-snapd,
     ...
   }: let
     system = "x86_64-linux";
     hostname = "RevoluNix";
-    pkgs = nixpkgs;
-    purepkgs = nixpkgs.purepkgs;
+    pkgs = (import ./mypkgs {
+      inherit
+        nixpkgs
+        unstable
+        home-manager
+        flox
+      ;
+    });
+    purepkgs = pkgs.purepkgs;
 
     usersInfo = rec {
       primaryUser = {
@@ -62,18 +76,18 @@
 
       configs = {
         home = hostname: builtins.listToAttrs
-          (nixpkgs.lib.forEach allUsers (username: {
+          (pkgs.lib.forEach allUsers (username: {
             name = username;
             value = (import ./home {
               inherit username hostname;
               externalImports = [
-                nixpkgs.configsImports.revolunixos.base.graphical.home
+                pkgs.systemTemplate.graphical.home
               ];
             });
           }));
 
         system = builtins.listToAttrs
-          (nixpkgs.lib.forEach allUsers (username: {
+          (pkgs.lib.forEach allUsers (username: {
             name = username;
             value = {
               isNormalUser = true;
@@ -114,7 +128,8 @@
     };
     ## ------------------------------------------------------------- ##
     defaultModules = [
-      nixpkgs.nixosModules.virtualMachines
+      pkgs.nixosModules.virtualMachines
+      nix-snapd.nixosModules.default
     ];
 ##########
 # Config #
@@ -132,14 +147,14 @@
       modules = let
         hostname = name;
       in defaultModules
-        ++ nixpkgs.defaultModules
+        ++ pkgs.defaultModules
         ++ computers.${name}.modules
         ++ [
 
           (import ./system {
             inherit hostname users;
             externalImports = [
-              nixpkgs.configsImports.revolunixos.base.graphical.system
+              pkgs.systemTemplate.graphical.system
             ];
           })
 
@@ -148,7 +163,7 @@
           home-manager.nixosModules.home-manager {home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            backupFileExtension = "backup18";
+            backupFileExtension = "backup39";
             users = (users.configs.home hostname);
           };}
         ];

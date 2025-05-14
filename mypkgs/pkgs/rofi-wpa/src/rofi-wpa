@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+rofi -modi WIFI:rofi-wpa-modi -show WIFI

@@ -41,10 +41,10 @@
 
       ### Messaging ----------------------------------------------- ###
       vesktop
-      # (discord.override {
-      #   withOpenASAR = true;
-      #   withVencord = true;
-      # })
+      (discord.override {
+        withOpenASAR = true;
+        withVencord = true;
+      })
       # xwaylandvideobridge
 
       ### Dev ----------------------------------------------------- ###
@@ -69,7 +69,6 @@
 
       ### Games --------------------------------------------------- ###
       prismlauncher
-      citra
 
       ### Misc ---------------------------------------------------- ###
       libreoffice
@@ -77,7 +76,8 @@
       qpdfview
       firefox
       viewnior
-      nemo-with-extensions
+      nautilus
+      zen-browser
       bitwarden-desktop
       pinta
       flowblade
@@ -86,10 +86,11 @@
       ### Utils --------------------------------------------------- ###
       file-roller
       galculator
-      # remmina
+      remmina
       gparted
       nextcloud-client
       ffmpeg
+      wineWowPackages.waylandFull
     ];
   };
 #######################################################################

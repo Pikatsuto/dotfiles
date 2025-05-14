@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# function
+copy_file() {
+  rm -rf \
+    ${1}
+
+  cp -RL \
+    ${1}_tmp \
+    ${1}
+}
+
+# mkdir -p ~/.npm-global
+# npm set prefix ~/.npm-global
+
+# Copy writable config
+# CONFIGS_TO_COPY=(
+# )
+
+# for CONFIG_PATH in ${CONFIGS_TO_COPY[@]}; do
+#   copy_file ${CONFIG_PATH}
+# done
+
+# # Copy if not exist
+# EDITABLE_CONFIGS_TO_COPY=(
+#   ~/.mozilla
+# )
+
+# for CONFIG_PATH in ${EDITABLE_CONFIGS_TO_COPY}; do
+#   [[ ! -f ${CONFIG_PATH} && ! -d ${CONFIG_PATH} ]] \
+#     && copy_file ${CONFIG_PATH}
+# done

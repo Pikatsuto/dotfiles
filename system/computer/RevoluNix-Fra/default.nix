@@ -2,63 +2,42 @@
 { config, pkgs, lib, ... }:
 {
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
-    # kernelParams = [
-    #   "net.ifnames=0"
-    #   "amd_iommu=on"
-    #   "video=eDP-2:2560x1600@165"
-    #   "mem_sleep_default=deep"
-    # ];
-    # supportedFilesystems = [ "ntfs" ];
-
-    # loader.systemd-boot.enable = lib.mkForce false;
-    # loader.grub.enable = lib.mkForce false;
-    # lanzaboote = {
-    #   enable = true;
-    #   pkiBundle = "/etc/secureboot";
-    # };
+    kernelPackages = pkgs.linuxPackages_xanmod_stable;
+    kernelParams = [
+      "net.ifnames=0"
+      "amd_iommu=on"
+      "video=eDP-2:2560x1600@165"
+      "mem_sleep_default=deep"
+      "amd_pstate=active"
+      "amdgpu.ppfeaturemask=0xffffffff"
+      "cpufreq.default_governor=powersave"
+      "initcall_blacklist=cpufreq_gov_userspace_init,cpufreq_gov_performance_init"
+      # "pcie_aspm=force"
+      # "pcie_aspm.policy=powersupersave"
+      "amdgpu.dcdebugmask=0x410"
+      "amdgpu.abmlevel=0"
+      "amdgpu.sg_display=0"
+      "rtc_cmos.use_acpi_alarm=1"
+    ];
     plymouth.enable = true;
   };
 
-  environment.variables = { ROC_ENABLE_PRE_VEGA = "1"; };
-
-  hardware.graphics = {
-	  enable = true;
-	  enable32Bit = true;
-    extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-      amdvlk
-      vaapiVdpau # not sure if this is needed
-      libvdpau-va-gl # also not sure if this is needed
-      mesa.opencl
-    ];
-    extraPackages32 = with pkgs; [
-      driversi686Linux.amdvlk
-    ];
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 1234 ];
   };
 
-  
-  systemd.tmpfiles.rules = [
-    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages_5.clr}"
-  ];
-
-  systemd.packages = with pkgs; [ lact ];
-  systemd.services.lactd.wantedBy = ["multi-user.target"];
-
-  services.xserver.videoDrivers = [ "amdgpu" ];
-  boot.initrd.kernelModules = [ "amdgpu" ];
-
   services = {
-    # blueman.enable = true;
-    upower.enable = true;
     fprintd.enable = true;
+    ## -------------------------------------------------------------- ##
+    upower.enable = true;
     power-profiles-daemon.enable = false;
     thermald.enable = true;
     tlp = {
       settings = {
-        CPU_BOOST_ON_AC = 1;
+        CPU_BOOST_ON_AC = 0;
         CPU_BOOST_ON_BAT = 0;
-        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+        CPU_SCALING_GOVERNOR_ON_AC = "powersave";
         CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
       };
     };
@@ -70,31 +49,6 @@
     hibernate.enable = lib.mkForce true;
     hybrid-sleep.enable = lib.mkForce true;
   };
-
-  # environment.etc = {
-  #   "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
-  #     bluez_monitor.properties = {
-  #       ["bluez5.enable-sbc-xq"] = true,
-  #       ["bluez5.enable-msbc"] = true,
-  #       ["bluez5.enable-hw-volume"] = true,
-  #       ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
-  #     }
-  #   '';
-  # };
-  #
-  # environment.etc = {
-  #   "libinput/local-overrides.quirks".text = ''
-  #     [Keyboard]
-  #     MatchUdevType=keyboard
-  #     MatchName=Framework Laptop 16 Keyboard Module - ANSI Keyboard
-  #     AttrKeyboardIntegration=internal
-  #   '';
-  # };
-  #
-  # services.udev.extraRules = ''
-  #    ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0012", ATTR{power/wakeup}="disabled", ATTR{driver/1-1.1.1.4/power/wakeup}="disabled"
-  #    ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0014", ATTR{power/wakeup}="disabled", ATTR{driver/1-1.1.1.4/power/wakeup}="disabled"
-  # '';
 
   environment.systemPackages = with pkgs; [
     # Thunderbolt
@@ -113,23 +67,35 @@
     lact
     sbctl
     clinfo
-
   ];
 
-  # ------------------------------------------------------------------ #
-  # hardware.sane.enable = true;
-  # hardware.bluetooth.enable = true;
-  # hardware.bluetooth.package = if (lib.versionOlder pkgs.bluez.version "5.76") then pkgs.unstable.bluez else pkgs.bluez;
-  # hardware.keyboard.qmk.enable = true;
-
-  # environment.variables = {
-  #   NIXPKGS_ALLOW_INSECURE = "y";
-  # };
+  environment.variables = {
+    # DRI_PRIME = 1;
+    NIXPKGS_ALLOW_UNFREE = 1;
+    LIBVA_DRIVER_NAME = "radeonsi";
+    VDPAU_DRIVER = "radeonsi";
+    QT-QUICK-BACKEND = 1;
+    QSG-RHI-PREFER-SOFTWARE-RENDERER = 1;
+    LD_PRELOAD = "";
+    ROC_ENABLE_PRE_VEGA = "1";
+  };
 
   # services.ollama.enable = true;
 
   networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
 
+  
+  # services.proxmox-ve = {
+  #   enable = true;
+  #   ipAddress = "192.168.1.10";
+  # };
+  #
+  # networking.bridges.vmbr0.interfaces = [ "eth0" ];
+  # networking.useDHCP = false;
+  # networking.interfaces.vmbr0.useDHCP = true;
+  # networking.interfaces.wlan0.useDHCP = true;
+
+  virtualisation.waydroid.enable = true;
   virtualisation.virtualMachines = {
     enable = true;
     username = users.primaryUser;
@@ -137,14 +103,16 @@
 
     machines = [
       {
-        lookingGlass = false;
+        lookingGlass = true;
         hardware = {
-          cores = 5;
+          cores = 4;
           memory = 16;
           disk.enable = false;
         };
         passthrough = {
           enable = true;
+          restartDm = false;
+          smartAccessMemory = true;
           pcies = [
             {
               lines = {
@@ -152,18 +120,23 @@
                 slot = "00";
                 functions = [
                   {
-                    fix.rebar = {
-                      enable = true;
-                      resources = [
-                        {
-                          resource = 0;
-                          resize = 13;
-                        }
-                        {
-                          resource = 2;
-                          resize = 3;
-                        }
-                      ];
+                    fix = {
+                      rom = false;
+                      voidRom = true;
+                      romBar = false;
+                      rebar = {
+                        enable = true;
+                        resources = [
+                          {
+                            resource = 0;
+                            resize = 13;
+                          }
+                          {
+                            resource = 2;
+                            resize = 3;
+                          }
+                        ];
+                      };
                     };
 
                     function = "0";

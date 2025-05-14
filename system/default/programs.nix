@@ -24,6 +24,9 @@
       fish
       fishPlugins.bobthefish
       fishPlugins.bass
+      # flatpak
+      # gnome-software
+      # bottles
 
       ### System -------------------------------------------------- ###
       nix-direnv

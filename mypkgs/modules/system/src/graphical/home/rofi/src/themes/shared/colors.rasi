@@ -1,0 +1,16 @@
+/**
+ *
+ * Author : Gabriel Guillou (Pikatsuto)
+ * Github : @Pikatsuto
+ *
+ * Colors
+ **/
+
+* {
+    background:     {{ color0 }};
+    background-alt: {{ color8 }};
+    foreground:     {{ color15 }};
+    selected:       {{ color1 }};
+    active:         {{ color3 }};
+    urgent:         {{ color2 }};
+}

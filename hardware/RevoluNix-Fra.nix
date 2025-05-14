@@ -8,53 +8,39 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "uas" "usbhid" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.supportedFilesystems = [ "ntfs" ];
-  environment.systemPackages = [ pkgs.cifs-utils ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/57bae7e1-8ab3-4646-8c15-93e0d647d750";
+    { device = "/dev/disk/by-uuid/8d2f5556-f6af-40eb-bfd4-7390413d5248";
       fsType = "btrfs";
-    };
-
-  fileSystems."/var" =
-    { device = "/dev/disk/by-uuid/9ef76f38-bc32-46b6-a1cc-21a2db6c3403";
-      fsType = "btrfs";
-    };
-
-  fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/20cd13e3-02a0-467a-b564-ece5f0e3090f";
-      fsType = "btrfs";
-    };
-
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/FD62-E2E0";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
     };
 
   fileSystems."/home/gabriel" =
-    { device = "/dev/disk/by-uuid/01DB3E649C7B2750";
+    { device = "/dev/disk/by-uuid/ECB8A745B8A70D60";
       fsType = "ntfs-3g";
       options = [ "rw" "uid=1000" "gid=100" "umask=077" ];
     };
 
-  fileSystems."/mnt/Video" = {
-    device = "//192.168.1.61/Big/Video";
-    fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,rw,uid=1000,gid=100";
+  fileSystems."/var" =
+    { device = "/dev/disk/by-uuid/0f8bad6f-6664-4410-a28e-0215918876c4";
+      fsType = "btrfs";
+    };
 
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
-  };
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-uuid/f2362ffe-91d9-4397-9fcd-65c137706304";
+      fsType = "btrfs";
+    };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/02d7ac39-d72d-4fff-98fa-2070a7664515"; }
-    ];
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-uuid/B00F-7B42";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

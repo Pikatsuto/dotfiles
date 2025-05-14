@@ -12,8 +12,18 @@
         autoLogin.relogin = true;
       };
       ### --------------------------------------------------------- ###
-      defaultSession = "hyprland";
+      autoLogin.enable = true;
+      autoLogin.user = "gabriel";
+      defaultSession = "hyprland-uwsm";
     };
+    flatpak.enable = true;
+    snap.enable = true;
   };
+  networking.extraHosts =
+  ''
+    192.168.122.10  rsx102-1.lan
+    192.168.122.11  rsx102-2.lan
+    192.168.122.12  rsx102-3.lan
+  '';
 ########################################################################
 }

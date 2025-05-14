@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+PROFILE=$(
+  ls ~/.mozilla/firefox/*.default/cookies.sqlite \
+    | head -n 1 \
+    | cut -d "/" -f 6
+)
+
+if [[ "${2}x" != "x" && "${2}x" != "x" ]]; then
+  while true; do
+    mpv ${1} --title="radio-mpv" ${2} --no-video \
+      --ytdl-raw-options-append="format=bestaudio"
+  done
+fi
