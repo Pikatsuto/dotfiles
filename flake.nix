@@ -163,7 +163,7 @@
           home-manager.nixosModules.home-manager {home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            backupFileExtension = "backup42";
+            backupFileExtension = "backup43";
             users = (users.configs.home hostname);
           };}
         ];
