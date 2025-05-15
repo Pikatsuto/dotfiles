@@ -16,7 +16,6 @@ npm set prefix ~/.npm-global &
 # Copy writable config
 CONFIGS_TO_COPY=(
   ~/.config/libreoffice
-  ~/.config/wal/templates
 )
 
 for CONFIG_PATH in ${CONFIGS_TO_COPY[@]}; do

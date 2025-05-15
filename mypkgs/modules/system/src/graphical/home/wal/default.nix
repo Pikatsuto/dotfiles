@@ -5,7 +5,7 @@
 #######################################################################
   home.file.wal = {
     source = ./src;
-      target = ".config/wal/templates_tmp";
+      target = ".config/wal/templates";
     recursive = true;
   };
 #######################################################################

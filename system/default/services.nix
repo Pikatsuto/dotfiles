@@ -14,7 +14,8 @@
       ### --------------------------------------------------------- ###
       autoLogin.enable = true;
       autoLogin.user = "gabriel";
-      defaultSession = "hyprland-uwsm";
+      # defaultSession = "hyprland-uwsm";
+      defaultSession = "hyprland";
     };
     flatpak.enable = true;
     snap.enable = true;

@@ -49,7 +49,8 @@ main() {
   cpwrconf
   get_walpaper
   blur_walpaper &
-  update_wal &
+  update_wal
+  kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf
   copy_walpaper &
 }
 
